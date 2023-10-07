@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit {
     private ngToastSrevice: NgToastService,
     private router: Router
   ) {
-    
+
   }
 
   ngOnInit() {
@@ -84,8 +84,8 @@ export class SignupComponent implements OnInit {
             // console.log(error);
             this.ngToastSrevice.error({
               detail: "Sorry! Coudn't register",
-              summary: 'Try again later',
-              duration: 5000,
+              summary: error.error.error,
+              duration: 8000,
             });
             this.signUpForm.reset();
           },

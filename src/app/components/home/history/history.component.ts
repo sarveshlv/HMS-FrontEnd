@@ -29,7 +29,7 @@ export class HistoryComponent {
     private bookingService: BookingService,
     private billingService: BillingService,
     private hospitalService: HospitalService
-  ) {}
+  ) { }
 
   //View specific bookings based on status on component load
   ngOnInit() {
@@ -57,28 +57,24 @@ export class HistoryComponent {
   viewBill(booking: Booking) {
     this.billingService.findByBookingId(booking.bookingId).subscribe(
       (response) => {
-        
+
         this.hospitalService.getHospitalById(booking.hospitalId).subscribe(
           (response) => {
             this.hName = response.hospitalName;
-            console.log(this.hName);
+            // console.log(this.hName);
           },
-          (error) => {
-            this.ngToast.error({
-              detail: 'Error',
-              summary: '',
-              duration: 5000,
-            });
+          (error: HttpErrorResponse) => {
+            this.handleError('Error', error.error);
           })
-          this.billId = response.billId;
-          this.bookingId = response.bookingId;
-          this.billAmount = response.billAmount;
-          this.paymentStatus = response.paymentStatus;
+        this.billId = response.billId;
+        this.bookingId = response.bookingId;
+        this.billAmount = response.billAmount;
+        this.paymentStatus = response.paymentStatus;
       },
-      (error) => {
+      (error: HttpErrorResponse) => {
         this.handleError(
           'Error in fetching booking details!',
-          'Please try again later'
+          error.error
         );
       }
     );

@@ -47,7 +47,7 @@ export class BedInfoComponent {
     private ngToast: NgToastService,
     private bookingService: BookingService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.bedService
@@ -142,7 +142,7 @@ export class BedInfoComponent {
       (error: HttpErrorResponse) => {
         this.handleError(
           'Error in fetching patient details!',
-          'Try again later.'
+          error.error
         );
       }
     );

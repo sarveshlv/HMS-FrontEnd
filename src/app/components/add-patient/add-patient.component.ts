@@ -8,6 +8,7 @@ import { PatientService } from 'src/app/services/patient.service';
 import { UserService } from 'src/app/services/user.service';
 import ValidateForm from '../login/login/login.component';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 //Array for populating state names in the select field
 const states: string[] = [
@@ -119,13 +120,13 @@ export class AddPatientComponent {
                 this.router.navigate(['/userhome']);
                 // console.log(response);
               },
-              (error) => {
+              (error:HttpErrorResponse) => {
                 this.handleError('Error', error.error);
                 this.addPatientForm.reset();
               }
             );
         },
-        (error) => {
+        (error:HttpErrorResponse) => {
           this.handleError('Error', error.error);
           this.addPatientForm.reset();
         }

@@ -50,3 +50,9 @@ export interface AddHospitalRequest {
   hospitalAddress: Address;
   pincode: number;
 }
+
+export interface UpdateHospital {
+  contactNo: number;
+  hospitalAddress: Address;
+  pincode: number;
+}

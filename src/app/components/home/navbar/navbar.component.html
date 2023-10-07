@@ -6,7 +6,7 @@
   <div class="navbar-right">
     <span id="welcome-text">Welcome, {{ userName }}!</span>
     <span>
-      <button class="profile-icon" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fas fa-user"></i></button>
+      <button class="profile-icon" data-bs-toggle="modal" data-bs-target="#editModal" (click)="updateProfile()"><i class="fas fa-user"></i></button>
     </span>
     <span class="logout" (click)="logout()">Logout</span>
   </div>
@@ -21,27 +21,42 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+        <!-- Edit Hospital details window -->
         <div *ngIf="isManager">
-          <label>Hospital Name : <span></span></label>
+          <label>Hospital Name : <span>{{ hospitalDetails.hospitalName }}</span></label>
+          <label>Hospital Type : <span>{{ hospitalDetails.hospitalType }}</span></label>
           <label>Address : </label>
-          <label>Pincode : </label>
-          <label>Hospital Type :</label>
-          <label>Contact no: </label>
+          <div>
+            <label>Street Address : <span><input type="text" [(ngModel)]="hospitalDetails.hospitalAddress.streetAddress" value="{{ hospitalDetails.hospitalAddress.streetAddress }}"></span></label>
+            <label>City Name : <span><input type="text" [(ngModel)]="hospitalDetails.hospitalAddress.cityName" value="{{ hospitalDetails.hospitalAddress.cityName }}"></span></label>
+            <label>State Name : <span><input type="text" [(ngModel)]="hospitalDetails.hospitalAddress.stateName" value="{{ hospitalDetails.hospitalAddress.stateName }}"></span></label>
+          </div>
+          <label>Pincode : <span><input type="text" [(ngModel)]="hospitalDetails.pincode" value="{{ hospitalDetails.pincode }}"></span></label>
+          <label>Contact no: <span><input type="text" [(ngModel)]="hospitalDetails.contactNo" value="{{ hospitalDetails.contactNo }}"></span></label>
         </div>
+
+
+        <!-- Edit Patient Details window  -->
         <div *ngIf="isPatient">
-          <label>First Name :</label>
-          <label>Last Name :</label>
-          <label>Contact No : </label>
-          <label>Aadhar Card :</label>
+          <label>First Name : <span><input type="text" [(ngModel)]="patientDetails.firstName" value="{{ patientDetails.firstName }}"></span></label>
+          <label>Last Name : <span><input type="text" [(ngModel)]="patientDetails.lastName" value="{{ patientDetails.lastName }}"></span></label>
+          <label>Contact No : <span><input type="text" [(ngModel)]="patientDetails.contactNumber" value="{{ patientDetails.contactNumber }}"></span></label>
+          <label>Aadhar Card : <span><input type="text" [(ngModel)]="patientDetails.aadharCard" value="{{ patientDetails.aadharCard }}"></span></label>
           <label>Address :</label>
-          <label>Pincode : </label>
+          <div>
+            <label>Street Address : <span><input type="text" [(ngModel)]="patientDetails.address.streetAddress" value="{{ patientDetails.address.streetAddress }}"></span></label>
+            <label>City Name : <span><input type="text" [(ngModel)]="patientDetails.address.cityName" value="{{ patientDetails.address.cityName }}"></span></label>
+            <label>State Name : <span><input type="text" [(ngModel)]="patientDetails.address.stateName" value="{{ patientDetails.address.stateName }}"></span></label>
+          </div>
+          <label>Pincode : <span><input type="text" [(ngModel)]="patientDetails.pincode" value="{{ patientDetails.pincode }}"></span></label>
           <label></label>
         </div>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Apply</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="clickUpdateProfile()">Apply</button>
       </div>
     </div>
   </div>
