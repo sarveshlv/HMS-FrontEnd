@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HospitalService } from 'src/app/services/hospital.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private jwtService: JwtService,
     private ngToast: NgToastService,
-    private router: Router
+    private router: Router,
+    private hospitalService: HospitalService
   ) {}
 
   //Validate form in real time
@@ -78,7 +80,20 @@ export class LoginComponent implements OnInit {
       if (response.userDetails.role === 'USER') {
         this.router.navigate(['/userhome']);
       } else if (response.userDetails.role === 'MANAGER') {
-        this.router.navigate(['/managerhome']);
+        this.hospitalService.getHospitalById(response.userDetails.referenceId).subscribe(
+          (response) => {
+            if(response.status === 'DECLINED') {
+              this.ngToast.info({
+                detail: 'Attention!',
+                summary: 'Your previous registration was declined! Please fill the details correctly again and submit',
+                duration: 10000
+              })
+              this.router.navigate(['/addhospital']);
+            } else {
+              this.router.navigate(['/managerhome']);
+            }
+          }
+        )
       }
     } else if (response.userDetails.role === 'MANAGER') {
       this.handleSuccess(

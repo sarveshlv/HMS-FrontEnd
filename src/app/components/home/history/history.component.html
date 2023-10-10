@@ -29,9 +29,12 @@
             <ng-container *ngIf="booking.bookingStatus === 'CANCELLED'">
               <i class="fa fa-times-circle text-danger"> Canceled</i>
             </ng-container>
+            <ng-container *ngIf="booking.bookingStatus === 'DECLINED'">
+              <i class="fa fa-times-circle text-danger"> Declined</i>
+            </ng-container>
           </td>
           <td>
-            <button *ngIf="booking.bookingStatus === 'COMPLETED'" data-bs-toggle="modal" data-bs-target="#viewBillModal" (click)="viewBill(booking)">View Bill</button>
+            <button *ngIf="booking.bookingStatus === 'COMPLETED'" class="view-bill-btn" data-bs-toggle="modal" data-bs-target="#viewBillModal" (click)="viewBill(booking)">View Bill</button>
           </td>
         </tr>
       </tbody>

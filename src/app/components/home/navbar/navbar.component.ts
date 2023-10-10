@@ -31,34 +31,28 @@ export class NavbarComponent {
     private patientService: PatientService,
     private hospitalService: HospitalService,
     private ngToast: NgToastService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.userDetails = this.jwtService.getUserDetails()!;
     if (this.userDetails.role === 'USER') {
       this.link = '/userhome';
       this.isPatient = true;
+      this.patientService
+        .findPatient(this.userDetails.referenceId)
+        .subscribe((response) => {
+          this.patientDetails = response;
+        });
     } else if (this.userDetails.role === 'MANAGER') {
       this.link = '/managerhome';
       this.isManager = true;
+      this.hospitalService
+        .getHospitalById(this.userDetails.referenceId)
+        .subscribe((response) => {
+          this.hospitalDetails = response;
+        });
     } else {
       this.link = '/adminhome';
-    }
-  }
-
-  updateProfile() {
-    if (this.isPatient) {
-      this.patientService.findPatient(this.userDetails.referenceId).subscribe(
-        (response) => {
-          this.patientDetails = response;
-        }
-      )
-    } else if (this.isManager) {
-      this.hospitalService.getHospitalById(this.userDetails.referenceId).subscribe(
-        (response) => {
-          this.hospitalDetails = response;
-        }
-      )
     }
   }
 
@@ -72,35 +66,37 @@ export class NavbarComponent {
         address: {
           streetAddress: this.patientDetails.address.streetAddress,
           cityName: this.patientDetails.address.cityName,
-          stateName: this.patientDetails.address.stateName
+          stateName: this.patientDetails.address.stateName,
         },
-        pincode: this.patientDetails.pincode
+        pincode: this.patientDetails.pincode,
       };
 
-      this.patientService.updatePatient(this.patientDetails.patientId, updatePatient).subscribe(
-        (response) => {
-          this.handleSuccess('Patient Details updated successfully!', '');
-        },
-        (error: HttpErrorResponse) => {
-          this.handleError("Couldn't update patient details!", error.error);
-        }
-      )
+      this.patientService
+        .updatePatient(this.patientDetails.patientId, updatePatient)
+        .subscribe(
+          (response) => {
+            this.handleSuccess('Patient Details updated successfully!', '');
+          },
+          (error: HttpErrorResponse) => {
+            this.handleError("Couldn't update patient details!", error.error);
+          }
+        );
     } else if (this.isManager) {
       const updateHospital: UpdateHospital = {
         contactNo: this.hospitalDetails.contactNo,
         hospitalAddress: {
           streetAddress: this.hospitalDetails.hospitalAddress.streetAddress,
           cityName: this.hospitalDetails.hospitalAddress.cityName,
-          stateName: this.hospitalDetails.hospitalAddress.stateName
+          stateName: this.hospitalDetails.hospitalAddress.stateName,
         },
-        pincode: this.hospitalDetails.pincode
+        pincode: this.hospitalDetails.pincode,
       };
 
-      this.hospitalService.updateHospital(this.userDetails.referenceId, updateHospital).subscribe(
-        (response) => {
+      this.hospitalService
+        .updateHospital(this.userDetails.referenceId, updateHospital)
+        .subscribe((response) => {
           this.handleSuccess('Hospital Details updated successfully!', '');
-        },
-      )
+        });
     }
   }
 
@@ -111,7 +107,10 @@ export class NavbarComponent {
         location.reload();
       },
       (error: HttpErrorResponse) => {
-        this.handleError("Sorry! Coudn't logout due to server error", error.error);
+        this.handleError(
+          "Sorry! Coudn't logout.",
+          error.error
+        );
       }
     );
   }
@@ -120,7 +119,7 @@ export class NavbarComponent {
     this.ngToast.success({
       detail: msg,
       summary: summary,
-      duration: 5000
+      duration: 5000,
     });
   }
 
@@ -128,7 +127,7 @@ export class NavbarComponent {
     this.ngToast.error({
       detail: msg,
       summary: error.error,
-      duration: 5000
-    })
+      duration: 5000,
+    });
   }
 }

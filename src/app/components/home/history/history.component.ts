@@ -43,7 +43,8 @@ export class HistoryComponent {
           this.bookingDetails = this.bookingDetails.filter((booking) => {
             return (
               booking.bookingStatus === BookingStatus.CANCELLED ||
-              booking.bookingStatus === BookingStatus.COMPLETED
+              booking.bookingStatus === BookingStatus.COMPLETED ||
+              booking.bookingStatus === BookingStatus.DECLINED
             );
           });
         },

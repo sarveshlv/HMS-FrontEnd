@@ -73,8 +73,8 @@
                         <td>{{ bed.bedType }}</td>
                         <td>{{ bed.bedStatus }}</td>
                         <td>
-                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit" data-bs-toggle="modal" data-bs-target="#editModal" (click)="editInfo(bed)"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete" (click)="deleteBed(bed)"><i class="fa fa-trash"></i></button>
+                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit Bed" data-bs-toggle="modal" data-bs-target="#editBedModal" (click)="editInfo(bed)"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete Bed" (click)="deleteBed(bed)"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -194,7 +194,7 @@
 </div>
 
 <!-- Model for editing bed information -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editBedModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -203,8 +203,8 @@
             </div>
         
             <div class="modal-body">
-                <label class="bed-details-label">Bed ID: <span><input type="text" name="bedId" [(ngModel)]="bedId" [readOnly]="true"></span></label>
-                <label class="bed-details-label">Bed Type: <span><input type="text" name="bedType" [(ngModel)]="bedType" [readOnly]="true"></span></label>
+                <label class="bed-details-label">Bed ID: <span>{{ bedId }}</span></label>
+                <label class="bed-details-label">Bed Type: <span>{{ bedType }}</span></label>
                 <label class="bed-details-label">Cost per day: <span><input type="number" name="cost" [(ngModel)]="cost"></span></label>
             </div>
 

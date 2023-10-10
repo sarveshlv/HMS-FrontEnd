@@ -38,7 +38,6 @@ export class StatusComponent {
           this.bookingDetails = this.bookingDetails.filter((booking) => {
             return (
               booking.bookingStatus === BookingStatus.REQUESTED ||
-              booking.bookingStatus === BookingStatus.DECLINED ||
               booking.bookingStatus === BookingStatus.APPROVED
             );
           });
