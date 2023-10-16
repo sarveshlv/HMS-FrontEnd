@@ -1,13 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgToastService } from 'ng-angular-popup';
-import { Billing } from 'src/app/models/billing.requests';
+// import * as Razorpay from 'razorpay';
+import { Billing, PaymentDetails } from 'src/app/models/billing.requests';
 import { Booking, BookingStatus } from 'src/app/models/booking.requests';
 import { UserDetails } from 'src/app/models/user.requests';
 import { BillingService } from 'src/app/services/billing.service';
 import { BookingService } from 'src/app/services/booking.service';
 import { HospitalService } from 'src/app/services/hospital.service';
 import { JwtService } from 'src/app/services/jwt/jwt.service';
+
+declare var Razorpay: any;
 
 @Component({
   selector: 'app-history',
@@ -82,20 +85,95 @@ export class HistoryComponent {
   }
 
   //Function to call the payment service
+  // payBill() {
+  //   this.billingService.initiatePayment(this.billId).subscribe({
+  //     next: (response: any) => {
+  //       this.ngToast.error({
+  //         detail: 'Unable to initiate payment',
+  //         summary: 'Plz try again later',
+  //         duration: 5000,
+  //       });
+  //     },
+  //     error: (error: HttpErrorResponse) => {
+  //       // console.log(error.error.text);
+  //       window.open(error.error.text, '_blank');
+  //     },
+  //   });
+  // }
+
   payBill() {
     this.billingService.initiatePayment(this.billId).subscribe({
-      next: (response: any) => {
+      next: (response: PaymentDetails) => {
+        // console.log("Payment Details ", response);
+        var options = {
+          order_id: response.id,
+          key_id: response.keyId,
+          amount: response.amount,
+          currency: response.currency,
+          name: `${this.userDetails.firstName} ${this.userDetails.lastName}`,
+          description: 'Bill for booking',
+          // image:,
+          handler: (response: any) => {
+            if (response != null && response.razorpay_payment_id != null) {
+              // console.log("Success");
+              this.processPaymentSuccess(this.billId);
+            } else {
+              this.ngToast.error({
+                detail: 'Payment failed',
+                summary: 'Plz try again later',
+                duration: 3000,
+              });
+            }
+          },
+          prefill: {
+            name: this.userDetails.firstName + " " + this.userDetails.lastName,
+            email: this.userDetails.emailId,
+          },
+          themes: {
+            color: '#F3754'
+          }
+
+        };
+        // console.log("Options", options);
+        this.ngToast.info({
+          detail: 'Redirecting to payment page',
+          summary: 'Please complete payment',
+          duration: 3000,
+        });
+
+        var razorPayObject = new Razorpay(options);
+        razorPayObject.open();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.error.text);
         this.ngToast.error({
-          detail: 'Unable to initiate payment',
-          summary: 'Plz try again later',
-          duration: 5000,
+          detail: 'Unable to start payment',
+          summary: error.error.error,
+          duration: 3000,
+        });
+      },
+    });
+
+  }
+
+  processPaymentSuccess(billingId: string) {
+    this.billingService.successPay(billingId).subscribe({
+      next: (response: Billing) => {
+        this.ngToast.success({
+          detail: 'Payment Succesfull',
+          summary: 'Status is being upddated in out system',
+          duration: 3000,
         });
       },
       error: (error: HttpErrorResponse) => {
-        // console.log(error.error.text);
-        window.open(error.error.text, '_blank');
+        this.ngToast.error({
+          detail: 'Unable to update payment status',
+          summary: error.error.error,
+          duration: 3000,
+        });
       },
     });
+    throw new Error('Method not implemented.');
   }
 
   //Handle Error messages

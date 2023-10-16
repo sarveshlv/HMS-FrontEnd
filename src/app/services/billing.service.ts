@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Billing, BillingRequest } from '../models/billing.requests';
+import { Billing, BillingRequest, PaymentDetails } from '../models/billing.requests';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,14 +14,18 @@ export class BillingService {
 
   addBilling(authorizationHeader: string, billingRequest: BillingRequest): Observable<Billing> {
     const headers = new HttpHeaders({ 'Authorization': authorizationHeader });
-    return this.httpClient.post<Billing>(`${this.billingUrl}/addBilling`, billingRequest, {headers})
+    return this.httpClient.post<Billing>(`${this.billingUrl}/addBilling`, billingRequest, { headers })
   }
 
   findByBookingId(bookingId: string): Observable<Billing> {
     return this.httpClient.get<Billing>(`${this.billingUrl}/findByBookingId/${bookingId}`);
   }
 
-  initiatePayment(billingId: string): Observable<any> {
-    return this.httpClient.get<any>(`${this.billingUrl}/pay/${billingId}`);
+  initiatePayment(billingId: string): Observable<PaymentDetails> {
+    return this.httpClient.get<PaymentDetails>(`${this.billingUrl}/pay/${billingId}`);
+  }
+
+  successPay(billingId: string): Observable<Billing> {
+    return this.httpClient.get<Billing>(`${this.billingUrl}/pay/success/${billingId}`);
   }
 }
