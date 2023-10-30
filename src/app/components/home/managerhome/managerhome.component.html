@@ -33,7 +33,8 @@
                 <tbody>
                     <tr *ngFor="let booking of bookingsByStatus; let i=index">
                         <td>{{ i+1 }}</td>
-                        <td>{{ booking.patientId }}</td>
+                        <!-- <td>{{ booking.patientId }}</td> -->
+                        <td>{{ getPatientName(booking.patientId) }}</td>
                         <td>{{ booking.bookingDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{ booking.bedType }}</td>
                         <td>{{ booking.fromDate | date:'dd-MM-yyyy'}}</td>
@@ -47,6 +48,7 @@
                     </tr>
                 </tbody>
             </table>
+            <p *ngIf="bookingsByStatus.length === 0">No records found!</p>
         </div>
     
         <!-- View window for viewing bed details and relavant actions -->
@@ -79,6 +81,7 @@
                     </tr>
                 </tbody>
             </table>
+            <p *ngIf="beds.length === 0">No records found!</p>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBedModal" (click)="isVerifiedHospital()">ADD BED</button>
         </div>
 
@@ -99,7 +102,7 @@
                 <tbody>
                     <tr *ngFor="let booking of bookings; let i=index">
                         <td>{{ i+1 }}</td>
-                        <td>{{ booking.patientId }}</td>
+                        <td>{{ getPatientName(booking.patientId) }}</td>
                         <td>{{ booking.bookingId }}</td>
                         <td>{{ booking.bookingDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{ booking.fromDate | date:'dd-MM-yyyy' }}</td>
@@ -111,6 +114,7 @@
                     </tr>
                 </tbody>
             </table>
+            <p *ngIf="bookings.length === 0">No records found!</p>
         </div>
     </div>
 </div>

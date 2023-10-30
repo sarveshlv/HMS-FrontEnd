@@ -145,7 +145,7 @@ export class HistoryComponent {
         razorPayObject.open();
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error.error.text);
+        // console.log(error.error.text);
         this.ngToast.error({
           detail: 'Unable to start payment',
           summary: error.error.error,
@@ -153,7 +153,6 @@ export class HistoryComponent {
         });
       },
     });
-
   }
 
   processPaymentSuccess(billingId: string) {

@@ -32,7 +32,7 @@
             </div>
           </div>
           <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')" class="text-danger">Password is required</small>
-
+          <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('minLength(8)', 'password')" class="text-danger">Length is of min 8 characters!</small>
           <!-- Submit button -->
           <div class="submit-button">
             <button type="submit" id="login-btn">LOGIN</button>

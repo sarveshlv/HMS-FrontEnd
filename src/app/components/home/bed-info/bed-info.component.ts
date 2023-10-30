@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
-import { JwtInterceptor } from 'src/app/jwt.interceptor';
 import { Bed, BedType } from 'src/app/models/bed.requests';
 import { AddBookingRequest } from 'src/app/models/booking.requests';
 import { Patient } from 'src/app/models/patient.requests';
@@ -38,7 +37,7 @@ export class BedInfoComponent {
   ventilatorBedCost: number = 0;
   oxygenBedCost: number = 0;
   bedType: string = '';
-  firstName: string = 'Sarvesh';
+  firstName: string = '';
 
   constructor(
     private bedService: BedService,

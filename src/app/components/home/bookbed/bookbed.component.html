@@ -6,7 +6,7 @@
   <div class="table-container">
     <h2>HOSPITALS</h2>
     <table class="table">
-      <thead>
+      <thead class="thead-dark">
         <tr>
           <th></th>
           <th>Hospital Name</th>
@@ -37,6 +37,7 @@
         </tr>
       </tbody>
     </table>
+    <p *ngIf="filteredHospitals.length === 0">No records found!</p>
   </div>
 </div>
 

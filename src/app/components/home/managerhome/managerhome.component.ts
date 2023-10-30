@@ -9,6 +9,7 @@ import { BedService } from 'src/app/services/bed.service';
 import { BookingService } from 'src/app/services/booking.service';
 import { HospitalService } from 'src/app/services/hospital.service';
 import { JwtService } from 'src/app/services/jwt/jwt.service';
+import { PatientService } from 'src/app/services/patient.service';
 
 @Component({
   selector: 'app-managerhome',
@@ -21,6 +22,7 @@ export class ManagerhomeComponent {
   bookingsByStatus: Booking[] = [];
   bedTypes: string[] = [];
   beds: Bed[] = [];
+  patientNames: { [key: string]: string } = {};
 
   showBookings = true;
   showBeds = false;
@@ -39,6 +41,7 @@ export class ManagerhomeComponent {
   constructor(
     private jwtService: JwtService,
     private bookingService: BookingService,
+    private patientService: PatientService,
     private ngToast: NgToastService,
     private bedService: BedService,
     private hospitalService: HospitalService
@@ -57,11 +60,26 @@ export class ManagerhomeComponent {
           this.bookingsByStatus = this.bookings.filter((booking) => {
             return booking.bookingStatus === BookingStatus.REQUESTED;
           });
+
+          //Map patient IDs to Patient names
+          for(const booking of this.bookings) {
+            this.patientService.findPatient(booking.patientId).subscribe(
+              (response) => {
+                this.patientNames[booking.patientId] = response.firstName;
+                // console.log(this.patientNames);
+              }
+            )
+        }
         },
         (error: HttpErrorResponse) => {
           this.handleError('Error', error.error);
         }
       );
+  }
+
+  //Function to get the Patient Names of each booking
+  getPatientName(patientId: string): string {
+    return this.patientNames[patientId];
   }
 
   //Function to call approveBooking service on click
@@ -171,7 +189,8 @@ export class ManagerhomeComponent {
       this.handleSuccess('Bed deleted!', '');
       this.loadBeds();
     }, (error:HttpErrorResponse) => {
-      this.handleError('Error', error.error);
+      // console.log(error);
+      this.handleError('Cannot delete Bed!', error.error);
     });
   }
 

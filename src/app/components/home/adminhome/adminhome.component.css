@@ -24,3 +24,8 @@
 .registrations {
   width: 90%;
 }
+
+p {
+  text-align: center;
+  color: red;
+}
